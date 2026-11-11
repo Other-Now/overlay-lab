@@ -1,0 +1,11 @@
+lab: #1, ESTABLISHED, IKEv2, fd3e0eb055d0b798_i* adc09b73fa8f66e7_r
+  local  'a.lab' @ 10.0.1.1[4500]
+  remote 'b.lab' @ 10.0.2.1[4500]
+  AES_GCM_16-128/PRF_HMAC_SHA2_256/CURVE_25519
+  established 0s ago, rekeying in 13424s
+  lab: #1, reqid 1, INSTALLED, TUNNEL, ESP:AES_GCM_16-128
+    installed 0s ago, rekeying in 3432s, expires in 3960s
+    in  cde72341,      0 bytes,     0 packets
+    out c1f32658,      0 bytes,     0 packets
+    local  172.16.1.1/32
+    remote 172.16.2.1/32

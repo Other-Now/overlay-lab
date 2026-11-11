@@ -1,0 +1,4 @@
+case,a_side,b_tx_csum_offload,gbps,inner_tcp_seen,inner_tcp_bad_csum
+kernel_to_kernel,kernel vxlan,on,0.100,91,91
+kernel_to_userspace,vxlan_tun,on,0.000,5,5
+kernel_to_userspace_fixed,vxlan_tun,off (vx0),0.100,747,0

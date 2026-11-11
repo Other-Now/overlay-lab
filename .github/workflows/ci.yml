@@ -1,0 +1,47 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  lab:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: packages
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y iperf3 ethtool strongswan-charon strongswan-swanctl libstrongswan-standard-plugins
+          # Ubuntu's AppArmor profiles for charon/swanctl only allow the /etc
+          # config paths; the lab keeps its per-namespace configs under /tmp.
+          for p in usr.lib.ipsec.charon usr.sbin.swanctl; do
+            [ -f /etc/apparmor.d/$p ] && sudo apparmor_parser -R /etc/apparmor.d/$p || true
+          done
+          python3 -m venv .venv && .venv/bin/pip install -q scapy
+      - name: build
+        run: cmake -S . -B build && cmake --build build -j
+      - name: build with ASan + UBSan
+        run: cmake -S . -B build-asan -DOL_SANITIZE=ON && cmake --build build-asan -j
+      - name: codec vs Scapy
+        run: |
+          .venv/bin/python tests/test_codec.py build/vxlan_codec
+          .venv/bin/python tests/test_codec.py build-asan/vxlan_codec
+      - name: smoke (all six overlays)
+        run: sudo scripts/run.sh scripts/smoke.sh
+      - name: live interop, user-space VTEP <-> kernel vxlan (release + ASan)
+        run: |
+          sudo PY=$PWD/.venv/bin/python scripts/run.sh tests/test_live.sh
+          sudo PY=$PWD/.venv/bin/python BUILD=$PWD/build-asan scripts/run.sh tests/test_live.sh
+      - name: bench
+        run: sudo REPS=3 SECS=5 scripts/run.sh scripts/bench.sh
+      - name: MTU black hole
+        run: sudo scripts/run.sh scripts/blackhole.sh
+      - name: checksum offload
+        run: sudo PY=$PWD/.venv/bin/python scripts/run.sh scripts/csum.sh
+      - name: report
+        run: |
+          python3 tools/report.py results > results/RESULTS.md
+          cat results/RESULTS.md >> "$GITHUB_STEP_SUMMARY"
+          { echo; echo "CPU: $(lscpu | sed -n 's/^Model name: *//p'), $(nproc) vCPU, kernel $(uname -r)"; } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: results
+          path: results/

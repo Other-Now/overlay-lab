@@ -1,0 +1,12 @@
+case,overlay,icmp_frag_needed,fix,ping_56,full_payload,ping_df_full,gbps,gbps_min,gbps_max,r_icmp_unreach_sent,r_filter_dropped
+plain_icmp_ok,mode_plain,ok,none,yes,1472,no,3.340,3.165,3.418,1,0
+plain_icmp_dropped,mode_plain,dropped,none,yes,1472,no,0.000,0.000,0.000,50,50
+vxlan_df_icmp_ok,mode_vxlan,ok,none,yes,1422,no,2.582,2.393,2.899,1,0
+vxlan_df_icmp_dropped,mode_vxlan,dropped,none,yes,1422,no,0.000,0.000,0.000,50,50
+vxlan_df_icmp_dropped_mtu1350,mode_vxlan,dropped,vx0 mtu 1350,yes,1322,yes,2.655,2.242,2.882,0,0
+vxlan_nodf_icmp_dropped,mode_vxlan,dropped,outer DF off (default),yes,1422,yes,1.819,1.775,1.825,0,0
+gre_icmp_ok,mode_gre,ok,none,yes,1448,no,3.461,3.387,3.504,1,0
+gre_icmp_dropped,mode_gre,dropped,none,yes,1448,no,0.000,0.000,0.000,50,50
+gre_icmp_dropped_mtu1376,mode_gre,dropped,gre1 mtu 1376,yes,1348,yes,3.165,2.849,3.394,0,0
+ipsec_icmp_ok,mode_ipsec,ok,none,yes,1472,no,0.747,0.400,0.772,1,0
+ipsec_icmp_dropped,mode_ipsec,dropped,none,yes,1472,no,0.000,0.000,0.000,48,48
