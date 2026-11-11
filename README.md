@@ -22,7 +22,7 @@ Everything runs on one Linux host, inside namespaces. Root isn't required: `scri
 
 ## Results
 
-These are the local WSL2 numbers (i5-9300H, 4 vCPU, kernel 6.6; every namespace shares those CPUs). Throughput is CPU-bound software forwarding, not wire speed, so read the ratios rather than the absolute Gbit/s. The CI run on GitHub's runner is in the Actions summary, and `results/wsl/` holds the raw CSVs.
+These are the local WSL2 numbers (i5-9300H, 4 vCPU, kernel 6.18; every namespace shares those CPUs). Throughput is CPU-bound software forwarding, not wire speed, so read the ratios rather than the absolute Gbit/s. The CI run on GitHub's runner is in the Actions summary, and `results/wsl/` holds the raw CSVs.
 
 ### 1. What each tunnel costs
 
